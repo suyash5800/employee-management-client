@@ -13,7 +13,7 @@ const AuthProvider = ({ children }) => {
 
     const fetchdeparmentscount = async () => {
         try {
-            const res = await axios.get("http://localhost:5800/api/auth/department");
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/department`);
             setDepartmentCount(res.data.length);
             setdepartmentNames(res.data);
             console.log("fetching data is successfully from authcontext");
@@ -35,10 +35,11 @@ const AuthProvider = ({ children }) => {
 
         const verifyUser = async () => {
             const token = localStorage.getItem("token");
+            console.log("getting token");
 
             try {
                 if (token) {
-                    const response = await axios.get("http://localhost:5173/api/auth/verify", {
+                    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/verify`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
@@ -65,6 +66,7 @@ const AuthProvider = ({ children }) => {
                         location.pathname !== "/login" &&
                         location.pathname !== "/newuser"
                     ) {
+                        console.log("login falid , navigate to login ");
                         navigate("/");
                     }
                 } else {

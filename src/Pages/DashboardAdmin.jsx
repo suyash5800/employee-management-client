@@ -17,6 +17,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!user) {
+      console.log("login faild");
       navigate("/");
     }
   }, [user, navigate]);

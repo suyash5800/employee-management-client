@@ -17,7 +17,7 @@ const Departments = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5800/api/auth/department", { name: departments });
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/department`, { name: departments });
       setDepartments("");
       fetchdeparmentscount();
       setShowModal(false);
@@ -30,7 +30,7 @@ const Departments = () => {
     e.preventDefault();
     if (!editData) return;
     try {
-      await axios.put(`http://localhost:5800/api/auth/department/${editData._id}`, { name: departments });
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/auth/department/${editData._id}`, { name: departments });
       setshowEditModel(false);
       setDepartments("");
       seteditData(null);
@@ -42,7 +42,7 @@ const Departments = () => {
 
   const handleDelete = async (_id) => {
     try {
-      await axios.delete(`http://localhost:5800/api/auth/department/${_id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/auth/department/${_id}`);
       fetchdeparmentscount();
     } catch (error) {
       console.log("Error deleting department", error);

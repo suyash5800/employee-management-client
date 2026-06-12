@@ -21,7 +21,7 @@ const Leaves = () => {
 
     try {
       const newstatus = "accepted";
-      await axios.put(`http://localhost:5800/api/auth/leaveUpdate/${id}`, { status: newstatus });
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/auth/leaveUpdate/${id}`, { status: newstatus });
 
       console.log("leave is aproved ");
       alert("leave approved");

@@ -69,7 +69,7 @@ const EmpInfoEdit = ({ setshowEditModel, employee }) => {
             }
 
             await axios.put(
-                `http://localhost:5800/api/auth/updateemployee/${employee._id}`,
+                `${import.meta.env.VITE_API_URL}/api/auth/updateemployee/${employee._id}`,
                 updateData,
                 {
                     headers: {

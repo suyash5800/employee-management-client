@@ -14,7 +14,7 @@ const EmployeeProvider = ({ children }) => {
     const fetchemployee = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:5800/api/auth/employee");
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/employee`);
             const filteredemployee = res.data.filter(user => user.role === "employee");
             setTableData(filteredemployee);
             setEmployeeCount(filteredemployee.length);
@@ -29,7 +29,7 @@ const EmployeeProvider = ({ children }) => {
 
     const deleteEmp = async (_id,name) => {
         try {
-            await axios.delete(`http://localhost:5800/api/auth/deletedEmp/${_id}`);
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/auth/deletedEmp/${_id}`);
             await fetchemployee();
             console.log("Employee deleted!");
             alert(`Employes is Deleted \nName: ${name}`);

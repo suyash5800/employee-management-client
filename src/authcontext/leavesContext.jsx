@@ -12,7 +12,7 @@ const LeavesProvider = ({ children } = {}) => {
 
   const fetchLeaves = async () => {
     try {
-      const res = await axios.get("http://localhost:5800/api/auth/leavesGets");
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/leavesGets`);
       setLeavesData(res.data);
       setTotalLeaves(res.data.length);
     } catch (error) {

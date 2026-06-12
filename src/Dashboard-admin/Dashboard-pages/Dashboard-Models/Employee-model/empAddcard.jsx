@@ -36,7 +36,7 @@ const EmpAddCard = () => {
             }
 
             const response = await axios.post(
-                "http://localhost:5800/api/auth/signup",
+                `${import.meta.env.VITE_API_URL}/api/auth/signup`,
                 formData
             );
 

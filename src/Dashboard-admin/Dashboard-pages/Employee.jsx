@@ -72,7 +72,7 @@ const EmpManagement = () => {
                                     <td className="text-center">
                                         {d.profileimage ? (
                                             <img
-                                                src={`http://localhost:5800/${d.profileimage.replace(/\\/g, "/")}`}
+                                                src={`${import.meta.env.VITE_API_URL}/${d.profileimage.replace(/\\/g, "/")}`}
                                                 alt="Profile"
                                                 width="70"
                                                 height="50"

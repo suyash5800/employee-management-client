@@ -18,7 +18,7 @@ const EmpCardInfo = ({ setshowCardModel,employee }) => {
     <div style={{ marginBottom: "15px" }}>
         {employee.profileimage ? (
             <img
-                src={`http://localhost:5800/${employee.profileimage.replace(/\\/g, "/")}`}
+                src={`${import.meta.env.VITE_API_URL}/${employee.profileimage.replace(/\\/g, "/")}`}
                
                 alt={`${employee.name}'s profile`}
                 width="100"
