@@ -5,6 +5,25 @@ import axios from "axios";
 import { useAuth } from "../authcontext/authcontext";
 
 const Login = () => {
+    const navigate = useNavigate();
+
+    const { user, loading: authLoading, login } = useAuth();
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
+    const [loginLoading, setLoginLoading] = useState(false);
+
+    useEffect(() => {
+        if (authLoading) return;
+
+        if (user?.role === "admin") {
+            navigate("/DashboardAdmin/dash-home");
+        } else if (user?.role === "employee") {
+            navigate("/Employee-DashBoard");
+        }
+    }, [user, authLoading, navigate]);
+
     useEffect(() => {
         const openFullscreen = () => {
             const elem = document.documentElement;
@@ -19,22 +38,17 @@ const Login = () => {
         };
 
         document.addEventListener("click", openFullscreen, { once: true });
+
+        return () => {
+            document.removeEventListener("click", openFullscreen);
+        };
     }, []);
-
-    const navigate = useNavigate();
-
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [errorMsg, setErrorMsg] = useState("");
-    const [loading, setLoading] = useState(false);
-
-    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         setErrorMsg("");
-        setLoading(true);
+        setLoginLoading(true);
 
         try {
             const response = await axios.post(
@@ -57,9 +71,17 @@ const Login = () => {
             console.error("Login error:", error);
             setErrorMsg(error.response?.data?.error || "Login failed");
         } finally {
-            setLoading(false);
+            setLoginLoading(false);
         }
     };
+
+    if (authLoading) {
+        return (
+            <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
+                <h4>Checking login...</h4>
+            </div>
+        );
+    }
 
     return (
         <div className="container-fluid bg-primary min-vh-100 d-flex align-items-center justify-content-center">
@@ -102,9 +124,9 @@ const Login = () => {
                         <button
                             type="submit"
                             className="btn btn-danger me-3"
-                            disabled={loading}
+                            disabled={loginLoading}
                         >
-                            {loading ? "Logging in..." : "Login"}
+                            {loginLoading ? "Logging in..." : "Login"}
                         </button>
 
                         <button
