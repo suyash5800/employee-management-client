@@ -1,15 +1,14 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-import { useAuth } from '../authcontext/authcontext';
+import { useAuth } from "../authcontext/authcontext";
 
 const Login = () => {
- 
-
     useEffect(() => {
         const openFullscreen = () => {
             const elem = document.documentElement;
+
             if (elem.requestFullscreen) {
                 elem.requestFullscreen();
             } else if (elem.webkitRequestFullscreen) {
@@ -24,42 +23,36 @@ const Login = () => {
 
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [errorMsg, setErrorMsg] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
     const [loading, setLoading] = useState(false);
+
     const { login } = useAuth();
 
     const handleSubmit = async (e) => {
-
-
         e.preventDefault();
-        setErrorMsg('');
 
+        setErrorMsg("");
         setLoading(true);
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, { email, password });
-           
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/auth/login`,
+                { email, password }
+            );
+
             if (response.data.success) {
-                login(response.data.user);
-                localStorage.setItem("token", response.data.token);
-                
+                login(response.data.user, response.data.token);
+
                 if (response.data.user.role === "admin") {
                     navigate("/DashboardAdmin/dash-home");
                 } else if (response.data.user.role === "employee") {
                     navigate("/Employee-DashBoard");
                 } else {
-                    navigate("/")
+                    navigate("/");
                 }
-
             }
-
-
-
-
-
-
         } catch (error) {
             console.error("Login error:", error);
             setErrorMsg(error.response?.data?.error || "Login failed");
@@ -72,9 +65,11 @@ const Login = () => {
         <div className="container-fluid bg-primary min-vh-100 d-flex align-items-center justify-content-center">
             <div className="col-md-6 text-center bg-light p-4 rounded shadow">
                 <h1 className="mb-4">Login</h1>
+
                 <form onSubmit={handleSubmit}>
                     <div className="form-group my-3 text-start">
                         <label htmlFor="email">Email:</label>
+
                         <input
                             type="email"
                             id="email"
@@ -88,6 +83,7 @@ const Login = () => {
 
                     <div className="form-group my-3 text-start">
                         <label htmlFor="password">Password:</label>
+
                         <input
                             type="password"
                             id="password"
@@ -96,16 +92,21 @@ const Login = () => {
                             placeholder="Enter your password"
                             className="form-control"
                             required
-                            autoComplete="off" 
+                            autoComplete="off"
                         />
                     </div>
 
                     {errorMsg && <p className="text-danger mt-2">{errorMsg}</p>}
 
                     <div className="d-flex justify-content-center mt-4">
-                        <button type="submit" className="btn btn-danger me-3" disabled={loading}>
+                        <button
+                            type="submit"
+                            className="btn btn-danger me-3"
+                            disabled={loading}
+                        >
                             {loading ? "Logging in..." : "Login"}
                         </button>
+
                         <button
                             type="button"
                             className="btn btn-outline-secondary"

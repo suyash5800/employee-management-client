@@ -1,13 +1,14 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
 
 const UserContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [departmentCount, setDepartmentCount] = useState(0);
-    const [departmentNames,setdepartmentNames]= useState([]);
+    const [departmentNames, setdepartmentNames] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -22,16 +23,16 @@ const AuthProvider = ({ children }) => {
         }
     };
 
-   
-    
 
- useEffect(() => {
-    fetchdeparmentscount();
-}, [location]); 
 
 
     useEffect(() => {
-       
+        fetchdeparmentscount();
+    }, [location]);
+
+
+    useEffect(() => {
+
 
         const verifyUser = async () => {
             const token = localStorage.getItem("token");
@@ -47,39 +48,46 @@ const AuthProvider = ({ children }) => {
 
                     if (response.data.success) {
                         setUser(response.data.user);
+                    } else {
+                        setUser(null);
                     }
                 } else {
-                 
+
                     if (
                         location.pathname !== "/login" &&
                         location.pathname !== "/newuser"
-                    )
-                     {
+                    ) {
                         navigate("/");
                     }
                 }
             } catch (error) {
                 if (error.response) {
                     console.error("Verification failed:", error.response.data);
-                 
+
                     if (
                         location.pathname !== "/login" &&
                         location.pathname !== "/newuser"
                     ) {
-                        console.log("login falid , navigate to login ");
+                        // console.log("login falid , navigate to login ");
                         navigate("/");
                     }
                 } else {
                     console.error("Network error or server down:", error);
                 }
+            } finally {
+                setLoading(false);
             }
         };
 
         verifyUser();
-    }, [navigate, location.pathname]); 
+    }, [navigate, location.pathname]);
 
-    const login = (userData) => {
+    const login = (userData, token) => {
         setUser(userData);
+
+        if (token) {
+            localStorage.setItem("token", token);
+        }
     };
 
     const logout = () => {
@@ -89,7 +97,7 @@ const AuthProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ user, login, logout, departmentCount, setDepartmentCount , departmentNames , fetchdeparmentscount }}>
+        <UserContext.Provider value={{ user, login, logout, departmentCount, setDepartmentCount, departmentNames, fetchdeparmentscount, loading }}>
             {children}
         </UserContext.Provider>
     );
