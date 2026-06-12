@@ -13,14 +13,24 @@ import Setting from "../Dashboard-admin/Dashboard-pages/Setting.jsx";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
+    if (loading) return;
+
     if (!user) {
-      console.log("login faild");
+      console.log("login failed");
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <DashboardLayout>
